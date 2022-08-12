@@ -55,8 +55,8 @@ class SubscribeSerializer(CustomUserSerializer):
         read_only_fields = ('email', 'username')
 
     def validate(self, data):
-        author = self.instance  # seconduser
-        user = self.context.get('request').user  # admin
+        author = self.instance
+        user = self.context.get('request').user
 
         if Subscribe.objects.filter(author=author, user=user).exists():
             raise ValidationError(
