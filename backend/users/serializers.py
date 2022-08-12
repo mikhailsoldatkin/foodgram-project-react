@@ -16,13 +16,13 @@ class CustomUserCreateSerializer(UserCreateSerializer):
             'username',
             'password'
         )
-        extra_kwargs = {
-            'email': {'required': True},
-            'username': {'required': True},
-            'password': {'required': True},
-            'first_name': {'required': True},
-            'last_name': {'required': True},
-        }
+        # extra_kwargs = {
+        #     'email': {'required': True},
+        #     'username': {'required': True},
+        #     'password': {'required': True},
+        #     'first_name': {'required': True},
+        #     'last_name': {'required': True},
+        # }
 
 
 class CustomUserSerializer(UserSerializer):
@@ -55,8 +55,8 @@ class SubscribeSerializer(CustomUserSerializer):
         read_only_fields = ('email', 'username')
 
     def validate(self, data):
-        author = self.instance
-        user = self.context.get('request').user
+        author = self.instance  # seconduser
+        user = self.context.get('request').user  # admin
 
         if Subscribe.objects.filter(author=author, user=user).exists():
             raise ValidationError(

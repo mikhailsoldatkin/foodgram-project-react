@@ -4,10 +4,7 @@ from django.db.models import UniqueConstraint
 
 
 class User(AbstractUser):
-
-    class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+    pass
 
 
 class Subscribe(models.Model):

@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'djoser',
 
     'users',
+    'recipes',
 ]
 
 MIDDLEWARE = [
@@ -102,7 +103,7 @@ DJOSER = {
         'current_user': 'users.serializers.CustomUserSerializer',
     },
     'PERMISSIONS': {
-        'user': ['rest_framework.permissions.IsAuthenticatedOrReadOnly'],
+        'user': ['rest_framework.permissions.IsAuthenticated'],
         'user_list': ['rest_framework.permissions.AllowAny'],
     },
     'HIDE_USERS': False,
