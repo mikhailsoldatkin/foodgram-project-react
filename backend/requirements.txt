@@ -1,0 +1,9 @@
+asgiref==3.5.2
+Django==3.2.15
+pip==22.2.2
+psycopg2-binary==2.9.3
+python-dotenv==0.20.0
+pytz==2022.2
+setuptools==57.0.0
+sqlparse==0.4.2
+wheel==0.36.2
