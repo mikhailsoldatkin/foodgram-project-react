@@ -16,13 +16,13 @@ class CustomUserCreateSerializer(UserCreateSerializer):
             'username',
             'password'
         )
-        # extra_kwargs = {
-        #     'email': {'required': True},
-        #     'username': {'required': True},
-        #     'password': {'required': True},
-        #     'first_name': {'required': True},
-        #     'last_name': {'required': True},
-        # }
+        extra_kwargs = {
+            'email': {'required': True},
+            'username': {'required': True},
+            'password': {'required': True},
+            'first_name': {'required': True},
+            'last_name': {'required': True},
+        }
 
 
 class CustomUserSerializer(UserSerializer):
@@ -47,11 +47,11 @@ class CustomUserSerializer(UserSerializer):
 
 
 class SubscribeSerializer(CustomUserSerializer):
-    # recipes_count = SerializerMethodField()
+    recipes_count = SerializerMethodField()
     # recipes = RecipeSerializer(many=True)
 
     class Meta(CustomUserSerializer.Meta):
-        fields = CustomUserSerializer.Meta.fields
+        fields = CustomUserSerializer.Meta.fields + ('recipes_count',)
         read_only_fields = ('email', 'username')
 
     def validate(self, data):
@@ -70,9 +70,9 @@ class SubscribeSerializer(CustomUserSerializer):
             )
         return data
 
-    # def get_recipes_count(self, obj):
-    #     print(self)
-    #     return obj.recipes.count()
+    def get_recipes_count(self, obj):
+        print(self)
+        return obj.recipes.count()
 
     # def get_recipes(self, obj):
     #     request = self.context.get('request')
