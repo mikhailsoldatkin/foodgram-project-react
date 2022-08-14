@@ -4,6 +4,8 @@ from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
 
+from api.serializers import RecipeSerializer
+from recipes.models import Recipe
 from .models import Subscribe
 
 User = get_user_model()
@@ -12,20 +14,10 @@ User = get_user_model()
 class CustomUserCreateSerializer(UserCreateSerializer):
     class Meta:
         model = User
-        fields = (
-            'first_name',
-            'last_name',
-            'email',
-            'username',
-            'password'
+        fields = tuple(User.REQUIRED_FIELDS) + (
+            User.USERNAME_FIELD,
+            'password',
         )
-        extra_kwargs = {
-            'email': {'required': True},
-            'username': {'required': True},
-            'password': {'required': True},
-            'first_name': {'required': True},
-            'last_name': {'required': True},
-        }
 
 
 class CustomUserSerializer(UserSerializer):
@@ -51,10 +43,12 @@ class CustomUserSerializer(UserSerializer):
 
 class SubscribeSerializer(CustomUserSerializer):
     recipes_count = SerializerMethodField()
-    # recipes = RecipeSerializer(many=True)
+    recipes = RecipeSerializer(many=True, read_only=True)
 
     class Meta(CustomUserSerializer.Meta):
-        fields = CustomUserSerializer.Meta.fields + ('recipes_count',)
+        fields = CustomUserSerializer.Meta.fields + (
+            'recipes_count', 'recipes'
+        )
         read_only_fields = ('email', 'username')
 
     def validate(self, data):
@@ -74,13 +68,15 @@ class SubscribeSerializer(CustomUserSerializer):
         return data
 
     def get_recipes_count(self, obj):
-        # print(self)
+        # print(f'{obj=}')
         return obj.recipes.count()
 
-    # def get_recipes(self, obj):
-    #     request = self.context.get('request')
-    #     limit = request.GET.get('recipes_limit')
-    #     recipes = Recipe.objects.filter(author=obj.author)
-    #     if limit:
-    #         recipes = recipes[:int(limit)]
-    #     return RecipeSerializer(recipes, many=True).data
+    def get_recipes(self, obj):
+        request = self.context.get('request')
+        limit = request.GET.get('recipes_limit')
+        recipes = obj.recipes.all()
+        if limit:
+            recipes = recipes[:int(limit)]
+        serializer = RecipeSerializer(recipes, many=True)
+
+        return serializer.data
