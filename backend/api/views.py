@@ -1,6 +1,6 @@
-from rest_framework import viewsets
-
+from rest_framework.viewsets import ModelViewSet
 from users.models import User
+
 from .serializers import (
     IngredientSerializer, TagSerializer, RecipeSerializer, FavouriteSerializer,
     ShoppingCartSerializer
@@ -10,26 +10,26 @@ from recipes.models import (
 )
 
 
-class IngredientViewSet(viewsets.ModelViewSet):
+class IngredientViewSet(ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
 
 
-class TagViewSet(viewsets.ModelViewSet):
+class TagViewSet(ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 
 
-class RecipeViewSet(viewsets.ModelViewSet):
+class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
 
 
-class FavouriteViewSet(viewsets.ModelViewSet):
+class FavouriteViewSet(ModelViewSet):
     queryset = Favourite.objects.all()
     serializer_class = FavouriteSerializer
 
 
-class ShoppingCartViewSet(viewsets.ModelViewSet):
+class ShoppingCartViewSet(ModelViewSet):
     queryset = ShoppingCart.objects.all()
     serializer_class = ShoppingCartSerializer

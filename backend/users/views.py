@@ -1,12 +1,15 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, permissions, status
+from djoser.views import UserViewSet
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Subscribe, User
+from .models import Subscribe
 from .serializers import CustomUserSerializer, SubscribeSerializer
-from djoser.views import UserViewSet
+
+User = get_user_model()
 
 
 class CustomUserViewSet(UserViewSet):
@@ -30,17 +33,15 @@ class CustomUserViewSet(UserViewSet):
             serializer.is_valid(raise_exception=True)
             Subscribe.objects.create(user=user, author=author)
 
-            return Response(serializer.data,
-                            status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == 'DELETE':
             subscription = get_object_or_404(Subscribe,
                                              user=user,
                                              author=author)
             subscription.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(
         detail=False,

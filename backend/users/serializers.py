@@ -1,9 +1,12 @@
+from django.contrib.auth import get_user_model
 from djoser.serializers import UserSerializer, UserCreateSerializer
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
 
-from .models import Subscribe, User
+from .models import Subscribe
+
+User = get_user_model()
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
@@ -55,8 +58,8 @@ class SubscribeSerializer(CustomUserSerializer):
         read_only_fields = ('email', 'username')
 
     def validate(self, data):
-        author = self.instance  # seconduser
-        user = self.context.get('request').user  # admin
+        author = self.instance
+        user = self.context.get('request').user
 
         if Subscribe.objects.filter(author=author, user=user).exists():
             raise ValidationError(
