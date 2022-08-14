@@ -74,7 +74,7 @@ class SubscribeSerializer(CustomUserSerializer):
         return data
 
     def get_recipes_count(self, obj):
-        print(self)
+        # print(self)
         return obj.recipes.count()
 
     # def get_recipes(self, obj):
