@@ -5,6 +5,13 @@ from .models import User, Subscribe
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
+    list_display = (
+        'username',
+        'id',
+        'email',
+        'first_name',
+        'last_name',
+    )
     list_filter = ('email', 'first_name')
 
 

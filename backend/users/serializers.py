@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserSerializer, UserCreateSerializer
+from drf_extra_fields.fields import Base64ImageField
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
+from rest_framework.serializers import ModelSerializer
 
-from api.serializers import RecipeSerializer
 from recipes.models import Recipe
 from .models import Subscribe
 
@@ -41,9 +42,23 @@ class CustomUserSerializer(UserSerializer):
         return Subscribe.objects.filter(user=user, author=obj).exists()
 
 
+class RecipeShortSerializer(ModelSerializer):
+    image = Base64ImageField()
+
+    class Meta:
+        model = Recipe
+        fields = (
+            'id',
+            'name',
+            'image',
+            'cooking_time'
+        )
+
+
 class SubscribeSerializer(CustomUserSerializer):
     recipes_count = SerializerMethodField()
-    recipes = RecipeSerializer(many=True, read_only=True)
+    recipes = RecipeShortSerializer(many=True, read_only=True)
+    # recipes = SerializerMethodField(many=True, read_only=True)
 
     class Meta(CustomUserSerializer.Meta):
         fields = CustomUserSerializer.Meta.fields + (
@@ -65,18 +80,20 @@ class SubscribeSerializer(CustomUserSerializer):
                 detail='Вы не можете подписаться на самого себя!',
                 code=status.HTTP_400_BAD_REQUEST
             )
+        data['user'] = user
+        data['author'] = author
+
         return data
 
     def get_recipes_count(self, obj):
-        # print(f'{obj=}')
         return obj.recipes.count()
 
-    def get_recipes(self, obj):
-        request = self.context.get('request')
-        limit = request.GET.get('recipes_limit')
-        recipes = obj.recipes.all()
-        if limit:
-            recipes = recipes[:int(limit)]
-        serializer = RecipeSerializer(recipes, many=True)
-
-        return serializer.data
+    # def get_recipes(self, obj):
+    #     request = self.context.get('request')
+    #     limit = request.GET.get('recipes_limit')
+    #     recipes = obj.recipes.all()
+    #     if limit:
+    #         recipes = recipes[:int(limit)]
+    #     serializer = RecipeShortSerializer(recipes, many=True)
+    #
+    #     return serializer.data

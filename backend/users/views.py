@@ -31,6 +31,10 @@ class CustomUserViewSet(UserViewSet):
                                              data=request.data,
                                              context={"request": request})
             serializer.is_valid(raise_exception=True)
+
+            user = serializer.validated_data.get('user')
+            author = serializer.validated_data.get('author')
+
             Subscribe.objects.create(user=user, author=author)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
