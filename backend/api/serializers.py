@@ -1,15 +1,13 @@
 from django.shortcuts import get_object_or_404
+from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import SerializerMethodField, ReadOnlyField, \
-    CurrentUserDefault
-from rest_framework.relations import PrimaryKeyRelatedField
+from rest_framework.fields import (
+    SerializerMethodField, ReadOnlyField, CurrentUserDefault
+)
 
-from recipes.models import (Ingredient, Tag, Recipe, Favourite, ShoppingCart,
-                            IngredientInRecipe)
+from recipes.models import Ingredient, Tag, Recipe, IngredientInRecipe
 from users.serializers import CustomUserSerializer
-
-from drf_extra_fields.fields import Base64ImageField
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -73,13 +71,13 @@ class RecipeSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         if user.is_anonymous:
             return False
-        return user.favorites.filter(id=obj.id).exists()
+        return user.favorites.filter(recipe=obj).exists()
 
     def get_is_in_shopping_cart(self, obj):
         user = self.context.get('request').user
         if user.is_anonymous:
             return False
-        return user.shopping_cart.filter(id=obj.id).exists()
+        return user.shopping_cart.filter(recipe=obj).exists()
 
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
@@ -91,12 +89,14 @@ class RecipeSerializer(serializers.ModelSerializer):
         for item in ingredients:
             ingredient = get_object_or_404(Ingredient, id=item['id'])
             if ingredient in ingredient_list:
-                raise ValidationError('Ингридиенты не могут повторяться!')
+                raise ValidationError({
+                    'ingredients': 'Ингридиенты не могут повторяться!'
+                })
 
             if int(item['amount']) <= 0:
-                raise ValidationError(
-                    'Количество ингредиента должно быть больше 0'
-                )
+                raise ValidationError({
+                    'amount': 'Количество ингредиента должно быть больше 0!'
+                })
 
             ingredient_list.append(ingredient)
 
@@ -122,19 +122,4 @@ class RecipeSerializer(serializers.ModelSerializer):
         recipe.tags.set(tags)
         self.create_ingredients_amounts(recipe=recipe,
                                         ingredients=ingredients)
-
         return recipe
-
-
-class FavouriteSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Favourite
-        fields = '__all__'
-
-
-class ShoppingCartSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = ShoppingCart
-        fields = '__all__'

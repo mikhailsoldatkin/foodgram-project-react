@@ -9,8 +9,8 @@ User = get_user_model()
 class RecipeFilter(FilterSet):
     tags = filters.ModelMultipleChoiceFilter(
         field_name='tags__slug',
-        queryset=Tag.objects.all(),
         to_field_name='slug',
+        queryset=Tag.objects.all(),
     )
 
     is_favorited = filters.BooleanFilter(method='filter_is_favorited')

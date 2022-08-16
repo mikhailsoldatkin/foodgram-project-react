@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from api.pagination import CustomPagination
 from .models import Subscribe
 from .serializers import CustomUserSerializer, SubscribeSerializer
 
@@ -15,11 +16,12 @@ User = get_user_model()
 class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
+    pagination_class = CustomPagination
 
     @action(
         detail=True,
         methods=['post', 'delete'],
-        permission_classes=(IsAuthenticated,)
+        permission_classes=[IsAuthenticated]
     )
     def subscribe(self, request, **kwargs):
         user = request.user
@@ -31,12 +33,9 @@ class CustomUserViewSet(UserViewSet):
                                              data=request.data,
                                              context={"request": request})
             serializer.is_valid(raise_exception=True)
-
             user = serializer.validated_data.get('user')
             author = serializer.validated_data.get('author')
-
             Subscribe.objects.create(user=user, author=author)
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == 'DELETE':
@@ -44,12 +43,11 @@ class CustomUserViewSet(UserViewSet):
                                              user=user,
                                              author=author)
             subscription.delete()
-
             return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(
         detail=False,
-        permission_classes=(IsAuthenticated,)
+        permission_classes=[IsAuthenticated]
     )
     def subscriptions(self, request):
         user = request.user
@@ -57,5 +55,4 @@ class CustomUserViewSet(UserViewSet):
         serializer = SubscribeSerializer(queryset,
                                          many=True,
                                          context={'request': request})
-
         return Response(serializer.data, status=status.HTTP_200_OK)

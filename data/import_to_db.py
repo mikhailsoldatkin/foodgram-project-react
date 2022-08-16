@@ -14,8 +14,8 @@ os.chdir(path)
 with open('ingredients.json', encoding='utf8') as f:
     data = json.load(f)
     for element in data:
-        instance = Ingredient(
+        instance = Ingredient.objects.get_or_create(
             name=element['name'],
             measurement_unit=element['measurement_unit']
         )
-        instance.save()
+        # instance.save()
