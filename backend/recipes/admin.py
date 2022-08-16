@@ -8,10 +8,9 @@ from .models import (
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author',)
+    list_display = ('name', 'id', 'author', 'added_in_favorites')
     readonly_fields = ('added_in_favorites',)
     list_filter = ('author', 'name', 'tags',)
-    # empty_value_display = '-пусто-'
 
     @display(description='Количество в избранных')
     def added_in_favorites(self, obj):

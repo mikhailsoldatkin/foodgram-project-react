@@ -69,20 +69,17 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.name
-        # return f'{self.name} от {self.author.get_full_name()}'
 
 
 class IngredientInRecipe(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        # related_name='ingredient',
         verbose_name='Рецепт',
     )
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        # related_name='recipe',
         verbose_name='Ингредиент',
     )
     amount = models.PositiveSmallIntegerField(

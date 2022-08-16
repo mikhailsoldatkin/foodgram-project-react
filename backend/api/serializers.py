@@ -38,7 +38,7 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True, read_only=True)
+    tags = TagSerializer(read_only=True, many=True)
     author = CustomUserSerializer(read_only=True,
                                   default=CurrentUserDefault())
     ingredients = IngredientInRecipeSerializer(
@@ -100,7 +100,22 @@ class RecipeSerializer(serializers.ModelSerializer):
 
             ingredient_list.append(ingredient)
 
+        tags = self.initial_data.get('tags')
+        if not tags:
+            raise ValidationError({
+                'tags': 'Нужно выбрать хотя бы один тег!'
+            })
+        tags_list = []
+        for tag in tags:
+            if tag in tags_list:
+                raise ValidationError({
+                    'tags': 'Теги должны быть уникальными!'
+                })
+
+            tags_list.append(tag)
+
         data['ingredients'] = ingredients
+        data['tags'] = tags
 
         return data
 
@@ -116,10 +131,31 @@ class RecipeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         author = self.context.get('request').user
         ingredients = validated_data.pop('ingredients')
-        tags = self.initial_data.get('tags')
+        tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(author=author,
                                        **validated_data)
         recipe.tags.set(tags)
         self.create_ingredients_amounts(recipe=recipe,
                                         ingredients=ingredients)
         return recipe
+
+    def update(self, instance, validated_data):
+        instance.image = validated_data.get('image', instance.image)
+        instance.name = validated_data.get('name', instance.name)
+        instance.text = validated_data.get('text', instance.text)
+        instance.cooking_time = validated_data.get(
+            'cooking_time', instance.cooking_time
+        )
+
+        tags = validated_data.get('tags')
+        ingredients = validated_data.get('ingredients')
+
+        instance.tags.clear()
+        instance.tags.set(tags)
+
+        instance.ingredients.clear()
+        self.create_ingredients_amounts(recipe=instance,
+                                        ingredients=ingredients)
+        instance.save()
+
+        return instance
