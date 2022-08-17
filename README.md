@@ -1,1 +1,3 @@
 # diplom v2
+
+work in progress...
