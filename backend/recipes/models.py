@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.db.models import UniqueConstraint
 
@@ -21,7 +21,17 @@ class Ingredient(models.Model):
 
 class Tag(models.Model):
     name = models.CharField('Название', unique=True, max_length=200)
-    color = models.CharField('Цветовой HEX-код', unique=True, max_length=7)
+    color = models.CharField(
+        'Цветовой HEX-код',
+        unique=True,
+        max_length=7,
+        validators=[
+            RegexValidator(
+                regex='^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
+                message='Введенное значение не является цветом в формате HEX!'
+            )
+        ]
+    )
     slug = models.SlugField('Уникальный слаг', unique=True, max_length=200)
 
     class Meta:
@@ -120,6 +130,9 @@ class Favourite(models.Model):
                              name='unique_favourite')
         ]
 
+    def __str__(self):
+        return f'{self.user} добавил "{self.recipe}" в Избранное'
+
 
 class ShoppingCart(models.Model):
     user = models.ForeignKey(
@@ -144,4 +157,4 @@ class ShoppingCart(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.user} добавил "{self.recipe}" в корзину покупок'
+        return f'{self.user} добавил "{self.recipe}" в Корзину покупок'

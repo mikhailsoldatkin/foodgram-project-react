@@ -6,10 +6,11 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, \
+    IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from recipes.models import (
     Ingredient, Tag, Recipe, Favourite, ShoppingCart, IngredientInRecipe
@@ -17,30 +18,30 @@ from recipes.models import (
 from users.serializers import RecipeShortSerializer
 from .filters import RecipeFilter
 from .pagination import CustomPagination
-from .permissions import ReadOnly, IsAuthor
+from .permissions import IsAuthorOrReadOnly, IsAdminOrReadOnly
 from .serializers import (
     IngredientSerializer, TagSerializer, RecipeSerializer
 )
 
 
-class IngredientViewSet(ModelViewSet):
+class IngredientViewSet(ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    permission_classes = (IsAdminUser | ReadOnly,)
+    permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('^name',)
 
 
-class TagViewSet(ModelViewSet):
+class TagViewSet(ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = (IsAdminUser | ReadOnly,)
+    permission_classes = (IsAdminOrReadOnly,)
 
 
 class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-    permission_classes = (ReadOnly | IsAuthor,)
+    permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = CustomPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
