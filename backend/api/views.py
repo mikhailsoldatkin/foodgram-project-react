@@ -14,7 +14,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from recipes.models import (
     Ingredient, Tag, Recipe, Favourite, ShoppingCart, IngredientInRecipe
 )
-from .filters import RecipeFilter
+from .filters import RecipeFilter, IngredientSearchFilter
 from .pagination import CustomPagination
 from .permissions import IsAuthorOrReadOnly, IsAdminOrReadOnly
 from .serializers import (
@@ -27,7 +27,7 @@ class IngredientViewSet(ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (IsAdminOrReadOnly,)
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (IngredientSearchFilter,)
     search_fields = ('^name',)
 
 
