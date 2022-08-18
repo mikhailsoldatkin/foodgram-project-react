@@ -14,12 +14,12 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from recipes.models import (
     Ingredient, Tag, Recipe, Favourite, ShoppingCart, IngredientInRecipe
 )
-from users.serializers import RecipeShortSerializer
 from .filters import RecipeFilter
 from .pagination import CustomPagination
 from .permissions import IsAuthorOrReadOnly, IsAdminOrReadOnly
 from .serializers import (
-    IngredientSerializer, TagSerializer, RecipeSerializer
+    IngredientSerializer, TagSerializer, RecipeWriteSerializer,
+    RecipeReadSerializer, RecipeShortSerializer
 )
 
 
@@ -39,11 +39,15 @@ class TagViewSet(ReadOnlyModelViewSet):
 
 class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
     permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = CustomPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
+
+    def get_serializer_class(self):
+        if self.request.method in ('POST', 'PATCH'):
+            return RecipeWriteSerializer
+        return RecipeReadSerializer
 
     @action(
         detail=True,
@@ -51,11 +55,10 @@ class RecipeViewSet(ModelViewSet):
         permission_classes=[IsAuthenticated]
     )
     def favorite(self, request, pk):
-        user = request.user
         if request.method == 'POST':
-            return self.add_to(Favourite, user, pk)
-        elif request.method == 'DELETE':
-            return self.delete_from(Favourite, user, pk)
+            return self.add_to(Favourite, request.user, pk)
+        else:
+            return self.delete_from(Favourite, request.user, pk)
 
     @action(
         detail=True,
@@ -63,11 +66,10 @@ class RecipeViewSet(ModelViewSet):
         permission_classes=[IsAuthenticated]
     )
     def shopping_cart(self, request, pk):
-        user = request.user
         if request.method == 'POST':
-            return self.add_to(ShoppingCart, user, pk)
-        elif request.method == 'DELETE':
-            return self.delete_from(ShoppingCart, user, pk)
+            return self.add_to(ShoppingCart, request.user, pk)
+        else:
+            return self.delete_from(ShoppingCart, request.user, pk)
 
     def add_to(self, model, user, pk):
         if model.objects.filter(user=user, recipe__id=pk).exists():
