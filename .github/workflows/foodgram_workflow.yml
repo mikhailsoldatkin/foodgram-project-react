@@ -44,16 +44,16 @@ jobs:
           sudo rm -rf foodgram
           sudo mkdir foodgram
 
-    - name: Copy files
-      uses: garygrossgarten/github-action-scp@release
-      with:
-          local: infra/
-          remote: /${{ secrets.USER }}/foodgram/
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          privateKey:  ${{ secrets.SSH_KEY }})
-          passphrase:  Buffer.from(${{ secrets.PASSPHRASE }})
-          # password: ${{ secrets.PASSPHRASE }}
+#    - name: Copy files
+#      uses: garygrossgarten/github-action-scp@release
+#      with:
+#          local: infra/
+#          remote: /${{ secrets.USER }}/foodgram/
+#          host: ${{ secrets.HOST }}
+#          username: ${{ secrets.USER }}
+#          privateKey:  ${{ secrets.SSH_KEY }})
+#          passphrase:  Buffer.from(${{ secrets.PASSPHRASE }})
+#          # password: ${{ secrets.PASSPHRASE }}
 
   build_and_push_backend_to_docker_hub:
     name: Push backend image to Docker Hub
