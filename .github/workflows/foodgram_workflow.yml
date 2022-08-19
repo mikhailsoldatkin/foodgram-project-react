@@ -51,7 +51,7 @@ jobs:
           remote: /${{ secrets.USER }}/foodgram/
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
-          privateKey:  Buffer.from(${{ secrets.SSH_KEY }})
+          privateKey:  ${{ secrets.SSH_KEY }})
           passphrase:  Buffer.from(${{ secrets.PASSPHRASE }})
           # password: ${{ secrets.PASSPHRASE }}
 
