@@ -27,42 +27,10 @@ jobs:
         run: |
           python -m flake8 backend
 
-  copy_infra_files_to_server:
-    name: Copy docker-compose.yml, nginx.conf
-    runs-on: ubuntu-latest
-    needs: tests
-    steps:
-      - uses: actions/checkout@v2
-#      - name: Create foodgram directory
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.USER }}
-#          key: ${{ secrets.SSH_KEY }}
-#          passphrase: ${{ secrets.PASSPHRASE }}
-#          script: |
-#            sudo rm -rf foodgram
-#            mkdir -p foodgram
-#            # sudo rm -rf foodgram/
-#            # sudo mkdir -p foodgram/
-#            # sudo chown ${{ secrets.USER }} foodgram/
-#            # sudo chmod 777 foodgram/
-
-      - name: Copy files
-        uses: garygrossgarten/github-action-scp@release
-        with:
-          local: infra/
-          remote: home/${{ secrets.USER }}/foodgram/
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          privateKey: ${{ secrets.SSH_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          # rmRemote: True
-
   build_and_push_backend_to_docker_hub:
     name: Push backend image to Docker Hub
     runs-on: ubuntu-latest
-    needs: copy_infra_files_to_server
+    needs: tests
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -83,7 +51,7 @@ jobs:
   build_and_push_frontend_to_docker_hub:
     name: Push frontend image to Docker Hub
     runs-on: ubuntu-latest
-    needs: copy_infra_files_to_server
+    needs: tests
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -107,7 +75,6 @@ jobs:
     needs:
       - build_and_push_backend_to_docker_hub
       - build_and_push_frontend_to_docker_hub
-      - copy_infra_files_to_server
     if: github.ref == 'refs/heads/master'
     steps:
       - name: Executing remote ssh commands to deploy
