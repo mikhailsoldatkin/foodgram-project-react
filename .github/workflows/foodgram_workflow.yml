@@ -51,9 +51,9 @@ jobs:
           remote: /${{ secrets.USER }}/foodgram/
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
-          privateKey: ${{ secrets.SSH_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          password: ${{ secrets.PASSPHRASE }}
+          privateKey:  Buffer.from(${{ secrets.SSH_KEY }})
+          passphrase:  Buffer.from(${{ secrets.PASSPHRASE }})
+          # password: ${{ secrets.PASSPHRASE }}
 
   build_and_push_backend_to_docker_hub:
     name: Push backend image to Docker Hub
