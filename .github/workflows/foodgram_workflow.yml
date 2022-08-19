@@ -45,14 +45,14 @@ jobs:
           sudo mkdir foodgram
 
     - name: Copy files
-      uses: garygrossgarten/github-action-scp@release
+      uses: appleboy/scp-action@master
       with:
-          local: infra/
-          remote: /${{ secrets.USER }}/foodgram/
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          privateKey: ${{ secrets.SSH_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+        key: ${{ secrets.SSH_KEY }}
+        source: "infra/docker-compose.yml, infra/nginx.conf"
+        target: "foodgram"
 
   build_and_push_backend_to_docker_hub:
     name: Push backend image to Docker Hub
