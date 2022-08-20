@@ -27,38 +27,37 @@ jobs:
         run: |
           python -m flake8 backend
 
-  copy_infra_to_server:
-    name: Copy docker-compose.yml and nginx.conf
-    runs-on: ubuntu-latest
-    needs: tests
-    steps:
-      - uses: actions/checkout@v2
-      - name: Create projects directory
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          script: |
-            cd ~
-
-      - name: Copy files
-        uses: garygrossgarten/github-action-scp@release
-        with:
-          local: infra/docker-compose.yml
-          remote: ~/
-          host: ${{ secrets.HOST }}
-          # username: ${{ secrets.USER }}
-          privateKey: ${{ secrets.SSH_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+#  copy_infra_to_server:
+#    name: Copy docker-compose.yml and nginx.conf
+#    runs-on: ubuntu-latest
+#    needs: tests
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Create projects directory
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          username: ${{ secrets.USER }}
+#          key: ${{ secrets.SSH_KEY }}
+#          passphrase: ${{ secrets.PASSPHRASE }}
+#          script: |
+#            cd ~
+#
+#      - name: Copy files
+#        uses: garygrossgarten/github-action-scp@release
+#        with:
+#          local: infra/docker-compose.yml
+#          remote: ~/
+#          host: ${{ secrets.HOST }}
+#          username: ${{ secrets.USER }}
+#          privateKey: ${{ secrets.SSH_KEY }}
+#          passphrase: ${{ secrets.PASSPHRASE }}
 
   build_and_push_backend_to_docker_hub:
     name: Push backend image to Docker Hub
     runs-on: ubuntu-latest
     needs:
       - tests
-      - copy_infra_to_server
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -81,7 +80,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - tests
-      - copy_infra_to_server
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -136,9 +134,9 @@ jobs:
             
             sudo docker-compose up -d
             
-            docker-compose exec backend python manage.py migrate
-            docker-compose exec backend python manage.py loaddata db.json
-            docker-compose exec backend python manage.py collectstatic –no-input
+            sudo docker-compose exec backend python manage.py migrate
+            sudo docker-compose exec backend python manage.py loaddata db.json
+            sudo docker-compose exec backend python manage.py collectstatic –no-input
 
 
   send_message:
