@@ -92,7 +92,7 @@ jobs:
             sudo docker-compose pull backend
             sudo docker-compose rm frontend 
             sudo docker-compose pull frontend
-            cd foodgram/
+            cd ${{ secrets.USER }}/foodgram/
             touch .env
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
