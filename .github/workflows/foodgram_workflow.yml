@@ -27,10 +27,39 @@ jobs:
         run: |
           python -m flake8 backend
 
+  copy_infra_to_server:
+    name: Copy docker-compose.yml and nginx.conf
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create projects directory
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.SSH_KEY }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+        script: |
+          cd ~
+#          sudo rm -rf foodgram
+#          mkdir -p foodgram
+    - name: Copy files
+      uses: garygrossgarten/github-action-scp@release
+      with:
+          local: infra/
+          remote: ~/
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          privateKey: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+
   build_and_push_backend_to_docker_hub:
     name: Push backend image to Docker Hub
     runs-on: ubuntu-latest
-    needs: tests
+    needs:
+      - tests
+      - copy_infra_to_server
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -51,7 +80,9 @@ jobs:
   build_and_push_frontend_to_docker_hub:
     name: Push frontend image to Docker Hub
     runs-on: ubuntu-latest
-    needs: tests
+    needs:
+      - tests
+      - copy_infra_to_server
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -94,7 +125,7 @@ jobs:
             sudo docker-compose pull frontend
             
             cd ~
-            cd foodgram/
+#            cd foodgram/
             sudo touch .env
             
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
