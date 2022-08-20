@@ -129,7 +129,7 @@ jobs:
             docker compose rm backend
             docker compose pull backend
             docker compose rm frontend 
-            compose pull frontend
+            docker compose pull frontend
             
             docker compose up -d
             
