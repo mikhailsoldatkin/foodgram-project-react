@@ -128,12 +128,12 @@ jobs:
             
             sudo docker compose rm backend
             sudo docker compose pull backend
-            # docker compose rm frontend 
-            # docker compose pull frontend
+            sudo docker compose rm frontend 
+            sudo compose pull frontend
             
             sudo docker compose up -d
             
-            sudo docker compose exec backend python manage.py migrate
+#            sudo docker compose exec backend python manage.py migrate
 #            docker compose exec backend python manage.py loaddata db.json
 #            docker compose exec backend python manage.py collectstatic –no-input
 
