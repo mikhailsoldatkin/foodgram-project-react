@@ -86,14 +86,17 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             sudo systemctl stop nginx
-            sudo docker-compose stop
+            sudo docker-compose down -v
             
             sudo docker-compose rm backend
             sudo docker-compose pull backend
             sudo docker-compose rm frontend 
             sudo docker-compose pull frontend
-            cd ${{ secrets.USER }}/foodgram/
-            touch .env
+            
+            cd ~
+            cd foodgram/
+            sudo touch .env
+            
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
@@ -102,7 +105,12 @@ jobs:
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             
-            sudo docker-compose up -d 
+            sudo docker-compose up -d
+            
+            docker-compose exec backend python manage.py migrate
+            docker-compose exec backend python manage.py loaddata db.json
+            docker-compose exec backend python manage.py collectstatic –no-input
+
 
   send_message:
     name: Sending Telegram message
