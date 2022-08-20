@@ -113,15 +113,15 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-#            docker-compose stop
+            # docker-compose stop
             docker-compose down -v
             
-#            docker rmi backend
-#            docker pull backend
-#            docker rmi frontend 
-#            docker pull frontend
+            # docker rmi backend
+            # docker pull backend
+            # docker rmi frontend 
+            # docker pull frontend
             
-#            cd ~
+            # cd ~
             sudo touch .env
             
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
@@ -134,9 +134,9 @@ jobs:
             
             docker-compose up -d
             
-#            docker-compose exec backend python manage.py migrate
-#            docker-compose exec backend python manage.py loaddata db.json
-#            docker-compose exec backend python manage.py collectstatic –no-input
+            # docker-compose exec backend python manage.py migrate
+            # docker-compose exec backend python manage.py loaddata db.json
+            # docker-compose exec backend python manage.py collectstatic –no-input
 
 
   send_message:
