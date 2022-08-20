@@ -113,16 +113,15 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            # sudo systemctl stop nginx
-            # docker-compose stop
+#            docker-compose stop
             docker-compose down -v
             
-            docker-compose rm backend
-            docker-compose pull backend
-            docker-compose rm frontend 
-            docker-compose pull frontend
+#            docker rmi backend
+#            docker pull backend
+#            docker rmi frontend 
+#            docker pull frontend
             
-            cd ~
+#            cd ~
             sudo touch .env
             
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
