@@ -125,14 +125,14 @@ jobs:
             sudo echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             sudo echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             
-            docker compose down -v
+            sudo docker compose down -v
             
-            docker compose rm backend
-            docker compose pull backend
+            sudo docker compose rm backend
+            sudo docker compose pull backend
             # docker compose rm frontend 
             # docker compose pull frontend
             
-            docker compose up -d
+            sudo docker compose up -d
 
 #            docker compose exec backend python manage.py makemigrations
 #            docker compose exec backend python manage.py migrate
