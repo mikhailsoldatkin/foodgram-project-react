@@ -39,17 +39,17 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          # passphrase: ${{ secrets.PASSPHRASE }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             cd ~
 
       - name: Copy files
         uses: garygrossgarten/github-action-scp@release
         with:
-          local: infra/
+          local: infra/docker-compose.yml
           remote: ~/
           host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
+          # username: ${{ secrets.USER }}
           privateKey: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
 
