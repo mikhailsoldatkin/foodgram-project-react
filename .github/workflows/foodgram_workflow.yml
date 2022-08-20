@@ -116,9 +116,9 @@ jobs:
             sudo systemctl stop nginx
             docker-compose stop
             
-            docker-compose rm backend
+            docker-compose rmi backend
             docker-compose pull backend
-            docker-compose rm frontend 
+            docker-compose rmi frontend 
             docker-compose pull frontend
             
             cd ~
