@@ -12,10 +12,6 @@ services:
   backend:
     image: mikhailsoldatkin/foodgram-backend:latest
     restart: always
-#    command: >
-#      bash -c "python manage.py migrate &&
-#      python manage.py collectstatic --no-input &&
-#      python manage.py loaddata db.json"
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/

@@ -135,9 +135,9 @@ jobs:
             
             docker-compose up -d
             
-            docker-compose exec backend python manage.py migrate
-            docker-compose exec backend python manage.py loaddata db.json
-            docker-compose exec backend python manage.py collectstatic –no-input
+#            docker-compose exec backend python manage.py migrate
+#            docker-compose exec backend python manage.py loaddata db.json
+#            docker-compose exec backend python manage.py collectstatic –no-input
 
 
   send_message:
