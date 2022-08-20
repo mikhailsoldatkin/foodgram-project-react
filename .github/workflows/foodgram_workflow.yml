@@ -113,12 +113,13 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            sudo systemctl stop nginx
-            docker-compose stop
+            # sudo systemctl stop nginx
+            # docker-compose stop
+            docker-compose down -v
             
-            docker-compose rmi backend
+            docker-compose rm backend
             docker-compose pull backend
-            docker-compose rmi frontend 
+            docker-compose rm frontend 
             docker-compose pull frontend
             
             cd ~
