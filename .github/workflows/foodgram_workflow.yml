@@ -115,13 +115,13 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             sudo touch .env
-            echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
-            echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
-            echo DB_NAME=${{ secrets.DB_NAME }} >> .env
-            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
-            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
-            echo DB_HOST=${{ secrets.DB_HOST }} >> .env
-            echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+            sudo echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+            sudo echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
+            sudo echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+            sudo echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+            sudo echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+            sudo echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+            sudo echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             
             docker compose down -v
             
@@ -137,14 +137,14 @@ jobs:
             # docker-compose exec backend python manage.py collectstatic –no-input
 
 
-  send_message:
-    name: Sending Telegram message
-    runs-on: ubuntu-latest
-    needs: deploy
-    steps:
-      - name: Send message
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: ${{ github.workflow }} успешно выполнен!
+#  send_message:
+#    name: Sending Telegram message
+#    runs-on: ubuntu-latest
+#    needs: deploy
+#    steps:
+#      - name: Send message
+#        uses: appleboy/telegram-action@master
+#        with:
+#          to: ${{ secrets.TELEGRAM_TO }}
+#          token: ${{ secrets.TELEGRAM_TOKEN }}
+#          message: ${{ github.workflow }} успешно выполнен!
