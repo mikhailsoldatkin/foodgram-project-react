@@ -11,11 +11,10 @@ from recipes.models import Ingredient
 path = '.'
 os.chdir(path)
 
-with open('ingredients.json', encoding='utf8') as f:
-    data = json.load(f)
+with open('ingredients.json', encoding='utf8') as file:
+    data = json.load(file)
     for element in data:
         instance = Ingredient.objects.get_or_create(
             name=element['name'],
             measurement_unit=element['measurement_unit']
         )
-        # instance.save()
