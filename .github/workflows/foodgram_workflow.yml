@@ -92,7 +92,6 @@ jobs:
             sudo docker-compose pull backend
             sudo docker-compose rm frontend 
             sudo docker-compose pull frontend
-            
             cd foodgram/
             touch .env
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
