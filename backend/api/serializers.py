@@ -136,9 +136,9 @@ class RecipeReadSerializer(ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     author = CustomUserSerializer(read_only=True)
     ingredients = IngredientInRecipeReadSerializer(
-        source='ingredientinrecipe_set',
-        many=True,
-        read_only=True
+        # source='ingredientinrecipe_set',
+        many=True
+        # read_only=True
     )
     image = Base64ImageField()
     is_favorited = SerializerMethodField(read_only=True)
@@ -237,7 +237,6 @@ class RecipeWriteSerializer(ModelSerializer):
         )
 
     def create(self, validated_data):
-        # author = self.context.get('request').user
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
 

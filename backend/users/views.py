@@ -54,5 +54,4 @@ class CustomUserViewSet(UserViewSet):
         serializer = SubscribeSerializer(pages,
                                          many=True,
                                          context={'request': request})
-        # return Response(serializer.data, status=status.HTTP_200_OK)
         return self.get_paginated_response(serializer.data)
