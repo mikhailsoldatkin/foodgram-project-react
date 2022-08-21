@@ -5,7 +5,8 @@ from drf_extra_fields.fields import Base64ImageField
 from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
 from rest_framework import serializers, status
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import ReadOnlyField, SerializerMethodField
+from rest_framework.fields import ReadOnlyField, SerializerMethodField, \
+    IntegerField, CharField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 from users.models import Subscribe
@@ -94,11 +95,15 @@ class TagSerializer(ModelSerializer):
 
 
 class IngredientInRecipeReadSerializer(ModelSerializer):
-    id = ReadOnlyField(source='ingredient.id')
-    name = ReadOnlyField(source='ingredient.name')
-    measurement_unit = ReadOnlyField(
-        source='ingredient.measurement_unit'
-    )
+    # id = ReadOnlyField(source='ingredient.id')
+    # name = ReadOnlyField(source='ingredient.name')
+    # measurement_unit = ReadOnlyField(
+    #     source='ingredient.measurement_unit'
+    # )
+
+    id = IntegerField(source='ingredient.id')
+    name = CharField(source='ingredient.name')
+    measurement_unit = CharField(source='ingredient.measurement_unit')
 
     class Meta:
         model = IngredientInRecipe
