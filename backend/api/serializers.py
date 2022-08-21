@@ -136,9 +136,9 @@ class RecipeReadSerializer(ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     author = CustomUserSerializer(read_only=True)
     ingredients = IngredientInRecipeReadSerializer(
-        # source='ingredientinrecipe_set',
-        many=True
-        # read_only=True
+        source='ingredientinrecipe_set',
+        many=True,
+        read_only=True
     )
     image = Base64ImageField()
     is_favorited = SerializerMethodField(read_only=True)
@@ -176,7 +176,9 @@ class RecipeWriteSerializer(ModelSerializer):
     tags = PrimaryKeyRelatedField(queryset=Tag.objects.all(),
                                   many=True)
     author = CustomUserSerializer(read_only=True)
-    ingredients = IngredientInRecipeWriteSerializer(many=True)
+    ingredients = IngredientInRecipeWriteSerializer(
+        source='ingredientinrecipe_set',
+        many=True)
     image = Base64ImageField()
 
     class Meta:
