@@ -126,7 +126,6 @@ jobs:
             sudo echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             
             sudo docker compose down -v
-            # or stop?
             
             sudo docker compose rm backend
             sudo docker compose pull backend
@@ -135,9 +134,9 @@ jobs:
             
             sudo docker compose up -d
 
-#            sudo docker compose exec backend python manage.py migrate
-#            sudo docker compose exec backend python manage.py loaddata data.json
-#            sudo docker compose exec backend python manage.py collectstatic --noinput
+            sudo docker compose exec backend python manage.py migrate
+            sudo docker compose exec backend python manage.py loaddata data.json
+            sudo docker compose exec backend python manage.py collectstatic --noinput
 
   send_message:
     name: Sending Telegram message
