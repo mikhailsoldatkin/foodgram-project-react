@@ -5,8 +5,8 @@ from drf_extra_fields.fields import Base64ImageField
 from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
 from rest_framework import serializers, status
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import ReadOnlyField, SerializerMethodField, \
-    IntegerField, CharField
+from rest_framework.fields import (CharField, IntegerField, ReadOnlyField,
+                                   SerializerMethodField)
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 from users.models import Subscribe
