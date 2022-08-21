@@ -176,9 +176,7 @@ class RecipeWriteSerializer(ModelSerializer):
     tags = PrimaryKeyRelatedField(queryset=Tag.objects.all(),
                                   many=True)
     author = CustomUserSerializer(read_only=True)
-    ingredients = IngredientInRecipeWriteSerializer(
-        source='ingredientinrecipe_set',
-        many=True)
+    ingredients = IngredientInRecipeWriteSerializer(many=True)
     image = Base64ImageField()
 
     class Meta:
