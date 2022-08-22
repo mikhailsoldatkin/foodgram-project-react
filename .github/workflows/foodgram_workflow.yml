@@ -99,8 +99,6 @@ jobs:
             sudo echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             sudo echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             
-            sudo docker compose stop
-            
             sudo docker compose rm backend
             sudo docker compose pull backend
             sudo docker compose rm frontend
