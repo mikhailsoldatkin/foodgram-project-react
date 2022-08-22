@@ -55,11 +55,11 @@ DB_NAME                 # postgres
 POSTGRES_USER           # postgres
 POSTGRES_PASSWORD       # свой пароль
 DB_HOST                 # db
-DB_PORT                 # 5432
+DB_PORT                 # 5432 (порт по умолчанию)
 ```
 
 - Создать и запустить контейнеры Docker, выполнить команду на сервере
-*(версии команд docker compose или docker-compose отличаются в зависимости от установленной версии Docker Compose):*
+*(версии команд "docker compose" или "docker-compose" отличаются в зависимости от установленной версии Docker Compose):*
 ```
 sudo docker compose up -d
 ```
@@ -71,7 +71,7 @@ sudo docker compose exec backend python manage.py migrate
 
 - Создать суперпользователя:
 ```
-docker-compose exec backend python manage.py createsuperuser
+docker compose exec backend python manage.py createsuperuser
 ```
 
 - Собрать статику:
