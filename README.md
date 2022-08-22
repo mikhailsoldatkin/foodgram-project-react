@@ -57,8 +57,8 @@ DB_HOST                 # db
 DB_PORT                 # 5432
 ```
 
-- Создать и запустить контейнеры Docker, выполнить команду на сервере:
-*(версии команд docker compose или docker-compose отличаются в зависимости от установленной версии Docker Compose)*
+- Создать и запустить контейнеры Docker, выполнить команду на сервере
+*(версии команд docker compose или docker-compose отличаются в зависимости от установленной версии Docker Compose):*
 ```
 sudo docker compose up -d
 ```
