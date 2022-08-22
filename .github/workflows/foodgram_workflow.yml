@@ -28,7 +28,7 @@ jobs:
           python -m flake8 backend
 
   build_and_push_backend_to_docker_hub:
-    name: Push backend image to Docker Hub
+    name: Pushing backend image to Docker Hub
     runs-on: ubuntu-latest
     needs:
       - tests
@@ -50,7 +50,7 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:latest
 
   build_and_push_frontend_to_docker_hub:
-    name: Push frontend image to Docker Hub
+    name: Pushing frontend image to Docker Hub
     runs-on: ubuntu-latest
     needs:
       - tests
@@ -72,7 +72,7 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend:latest
 
   deploy:
-    name: Deploy on remote server
+    name: Deploying on remote server
     runs-on: ubuntu-latest
     needs:
       - tests
