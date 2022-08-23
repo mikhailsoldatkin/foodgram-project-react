@@ -26,7 +26,7 @@ class IngredientViewSet(ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (IngredientSearchFilter,)
-    search_fields = ('^name',)
+    search_fields = ('@name',)
 
 
 class TagViewSet(ReadOnlyModelViewSet):
