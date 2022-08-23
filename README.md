@@ -52,7 +52,7 @@ TELEGRAM_TOKEN          # токен бота, посылающего сообщ
 DB_ENGINE               # django.db.backends.postgresql
 DB_NAME                 # postgres
 POSTGRES_USER           # postgres
-POSTGRES_PASSWORD       # свой пароль
+POSTGRES_PASSWORD       # postgres
 DB_HOST                 # db
 DB_PORT                 # 5432 (порт по умолчанию)
 ```
@@ -108,10 +108,10 @@ https://github.com/mikhailsoldatkin/foodgram-project-react.git
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=postgres
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=password   # укажите свой пароль
+POSTGRES_PASSWORD=postgres
 DB_HOST=db
 DB_PORT=5432
-SECRET_KEY = 'секретный ключ Django'
+SECRET_KEY='секретный ключ Django'
 ```
 
 - Создать и запустить контейнеры Docker, как указано выше.
