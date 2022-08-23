@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from .filters import IngredientSearchFilter, RecipeFilter
+from .filters import IngredientFilter, IngredientSearchFilter, RecipeFilter
 from .pagination import CustomPagination
 from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
@@ -25,8 +25,11 @@ class IngredientViewSet(ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (IsAdminOrReadOnly,)
-    filter_backends = (IngredientSearchFilter,)
-    search_fields = ('$name',)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = IngredientFilter
+
+    # filter_backends = (IngredientSearchFilter,)
+    # search_fields = ('$name',)
 
 
 class TagViewSet(ReadOnlyModelViewSet):
