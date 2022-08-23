@@ -33,8 +33,8 @@ sudo apt-get install docker-compose-plugin              # последняя в�
 - Скопировать на сервер файлы docker-compose.yml, nginx.conf из папки infra (команды выполнять находясь в папке infra):
 
 ```
-scp docker-compose.yml nginx.conf username@IP:/home/username/       # username - имя пользователя на сервере
-                                                                    # IP - публичный IP сервера
+scp docker-compose.yml nginx.conf username@IP:/home/username/   # username - имя пользователя на сервере
+                                                                # IP - публичный IP сервера
 ```
 
 - Для работы с GitHub Actions необходимо в репозитории в разделе Secrets > Actions создать переменные окружения:
