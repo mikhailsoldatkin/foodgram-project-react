@@ -25,7 +25,7 @@ class IngredientViewSet(ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (IsAdminOrReadOnly,)
-    filter_backends = (IngredientSearchFilter, DjangoFilterBackend)
+    filter_backends = (IngredientSearchFilter,)
     search_fields = ('^name',)
 
 
