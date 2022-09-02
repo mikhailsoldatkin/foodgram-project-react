@@ -31,11 +31,11 @@ services:
     image: nginx:1.21.3-alpine
     ports:
       - "80:80"
-      - "443:443"
+#      - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./foodgramproject.crt:/etc/ssl/foodgramproject.crt
-      - ./foodgramproject.key:/etc/ssl/foodgramproject.key
+#      - ./foodgramproject.crt:/etc/ssl/foodgramproject.crt
+#      - ./foodgramproject.key:/etc/ssl/foodgramproject.key
       - ../frontend/build:/usr/share/nginx/html/
       - static_value:/var/html/static/
       - media_value:/var/html/media/
