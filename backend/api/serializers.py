@@ -1,14 +1,16 @@
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import IntegerField, SerializerMethodField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
+
+from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
 from users.models import Subscribe
 
 User = get_user_model()
@@ -203,6 +205,7 @@ class RecipeWriteSerializer(ModelSerializer):
             tags_list.append(tag)
         return value
 
+    @transaction.atomic
     def create_ingredients_amounts(self, ingredients, recipe):
         IngredientInRecipe.objects.bulk_create(
             [IngredientInRecipe(
@@ -212,6 +215,7 @@ class RecipeWriteSerializer(ModelSerializer):
             ) for ingredient in ingredients]
         )
 
+    @transaction.atomic
     def create(self, validated_data):
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
@@ -221,6 +225,7 @@ class RecipeWriteSerializer(ModelSerializer):
                                         ingredients=ingredients)
         return recipe
 
+    @transaction.atomic
     def update(self, instance, validated_data):
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
