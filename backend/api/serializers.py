@@ -193,15 +193,11 @@ class RecipeWriteSerializer(ModelSerializer):
     def validate_tags(self, value):
         tags = value
         if not tags:
-            raise ValidationError({
-                'tags': 'Нужно выбрать хотя бы один тег!'
-            })
+            raise ValidationError({'tags': 'Нужно выбрать хотя бы один тег!'})
         tags_list = []
         for tag in tags:
             if tag in tags_list:
-                raise ValidationError({
-                    'tags': 'Теги должны быть уникальными!'
-                })
+                raise ValidationError({'tags': 'Теги должны быть уникальными!'})
             tags_list.append(tag)
         return value
 
@@ -221,8 +217,7 @@ class RecipeWriteSerializer(ModelSerializer):
         ingredients = validated_data.pop('ingredients')
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
-        self.create_ingredients_amounts(recipe=recipe,
-                                        ingredients=ingredients)
+        self.create_ingredients_amounts(recipe=recipe, ingredients=ingredients)
         return recipe
 
     @transaction.atomic
@@ -233,16 +228,14 @@ class RecipeWriteSerializer(ModelSerializer):
         instance.tags.clear()
         instance.tags.set(tags)
         instance.ingredients.clear()
-        self.create_ingredients_amounts(recipe=instance,
-                                        ingredients=ingredients)
+        self.create_ingredients_amounts(recipe=instance, ingredients=ingredients)
         instance.save()
         return instance
 
     def to_representation(self, instance):
         request = self.context.get('request')
         context = {'request': request}
-        return RecipeReadSerializer(instance,
-                                    context=context).data
+        return RecipeReadSerializer(instance, context=context).data
 
 
 class RecipeShortSerializer(ModelSerializer):
