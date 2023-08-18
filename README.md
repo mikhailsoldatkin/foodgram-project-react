@@ -103,7 +103,7 @@ sudo docker compose stop         # без удаления
 https://github.com/mikhailsoldatkin/foodgram-project-react.git
 ```
 
-- В директории infra файл example.env переименовать в .env и заполнить своими данными:
+- В директории infra создать файл .env и заполнить своими данными по аналогии с example.env:
 ```
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=postgres
