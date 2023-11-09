@@ -50,7 +50,7 @@ TELEGRAM_TO             # ID телеграм-аккаунта для посыл
 TELEGRAM_TOKEN          # токен бота, посылающего сообщение
 
 DB_ENGINE               # django.db.backends.postgresql
-DB_NAME                 # postgres
+POSTGRES_DB             # postgres
 POSTGRES_USER           # postgres
 POSTGRES_PASSWORD       # postgres
 DB_HOST                 # db
@@ -106,7 +106,7 @@ https://github.com/mikhailsoldatkin/foodgram-project-react.git
 - В директории infra создать файл .env и заполнить своими данными по аналогии с example.env:
 ```
 DB_ENGINE=django.db.backends.postgresql
-DB_NAME=postgres
+POSTGRES_DB=postgres
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 DB_HOST=db
